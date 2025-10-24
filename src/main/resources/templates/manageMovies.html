@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Movies | CineBook Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: "Poppins", sans-serif;
+            color: #fff;
+            padding: 40px;
+        }
+        h2 {
+            color: #00d4ff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .movie-form, .movie-table {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+            margin-bottom: 30px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 6px;
+            outline: none;
+        }
+        input[type="file"] {
+            background: none;
+            color: #ccc;
+        }
+        button {
+            background: #00d4ff;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover {
+            background: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: rgba(0, 212, 255, 0.3);
+        }
+        tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .actions i {
+            cursor: pointer;
+            margin: 0 8px;
+            transition: 0.3s;
+        }
+        .actions i:hover {
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <h2>🎬 Manage Movies</h2>
+
+    <div class="movie-form">
+        <form th:action="@{/admin/movies/add}" method="post" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Movie Title" required>
+            <input type="text" name="genre" placeholder="Genre" required>
+            <input type="text" name="duration" placeholder="Duration (e.g., 2h 15m)" required>
+            <textarea name="description" placeholder="Short Description"></textarea>
+            <input type="file" name="poster" accept="image/*" required>
+            <button type="submit"><i class="fas fa-plus"></i> Add Movie</button>
+        </form>
+    </div>
+
+    <div class="movie-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Poster</th>
+                    <th>Title</th>
+                    <th>Genre</th>
+                    <th>Duration</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="movie : ${movies}">
+                    <td><img th:src="@{'/uploads/' + ${movie.poster}}" width="60"></td>
+                    <td th:text="${movie.title}"></td>
+                    <td th:text="${movie.genre}"></td>
+                    <td th:text="${movie.duration}"></td>
+                    <td th:text="${movie.description}"></td>
+                    <td class="actions">
+                        <a th:href="@{'/admin/movies/edit/' + ${movie.id}}"><i class="fas fa-edit"></i></a>
+                        <a th:href="@{'/admin/movies/delete/' + ${movie.id}}"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

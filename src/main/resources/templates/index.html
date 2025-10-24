@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineBook - Movie Ticket Booking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e50914;
+            --secondary: #141414;
+            --accent: #f5c518;
+            --light: #ffffff;
+            --dark: #000000;
+            --gray: #2c2c2c;
+            --light-gray: #f5f5f5;
+            --user-color: #4a90e2;
+            --theater-color: #8e44ad;
+            --admin-color: #27ae60;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgba(20, 20, 20, 0.95);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--user-color);
+            border: 1px solid var(--user-color);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-login:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(74, 144, 226, 0.4), transparent);
+            transition: all 0.6s;
+            z-index: -1;
+        }
+
+        .btn-login:hover {
+            background: var(--user-color);
+            color: white;
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .btn-login:hover:before {
+            left: 100%;
+        }
+
+        .btn-signup {
+            background: var(--theater-color);
+            color: var(--light);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-signup:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s;
+            z-index: -1;
+        }
+
+        .btn-signup:hover {
+            background: #7d3c98;
+            box-shadow: 0 0 15px rgba(142, 68, 173, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .btn-signup:hover:before {
+            left: 100%;
+        }
+
+        .btn-admin {
+            background: var(--admin-color);
+            color: var(--light);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-admin:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s;
+            z-index: -1;
+        }
+
+        .btn-admin:hover {
+            background: #219653;
+            box-shadow: 0 0 15px rgba(39, 174, 96, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .btn-admin:hover:before {
+            left: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1489599809505-fc3c9a6c8c6a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-box button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #ff0a16;
+        }
+
+        /* Features Section */
+        .section-title {
+            text-align: center;
+            margin: 60px 0 40px;
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        .features {
+            padding: 60px 0;
+            background: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        /* Modules Section */
+        .modules {
+            padding: 80px 0;
+            background: var(--gray);
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 25px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .module-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .module-card h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .module-card h3 i {
+            font-size: 1.2rem;
+        }
+
+        /* User Module Specific Styles */
+        .user-module {
+            border-left: 4px solid var(--user-color);
+        }
+
+        .user-module h3 {
+            color: var(--user-color);
+        }
+
+        .user-module .module-icon {
+            color: var(--user-color);
+        }
+
+        /* Theater Module Specific Styles */
+        .theater-module {
+            border-left: 4px solid var(--theater-color);
+        }
+
+        .theater-module h3 {
+            color: var(--theater-color);
+        }
+
+        .theater-module .module-icon {
+            color: var(--theater-color);
+        }
+
+        /* Admin Module Specific Styles */
+        .admin-module {
+            border-left: 4px solid var(--admin-color);
+        }
+
+        .admin-module h3 {
+            color: var(--admin-color);
+        }
+
+        .admin-module .module-icon {
+            color: var(--admin-color);
+        }
+
+        /* Other Modules */
+        .other-module {
+            border-left: 4px solid var(--primary);
+        }
+
+        .other-module h3 {
+            color: var(--accent);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+            background: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: -10px;
+            width: 50%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            margin-bottom: 10px;
+        }
+
+        /* User/Admin CTA Section */
+        .user-cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--user-color), #2c5aa0);
+            text-align: center;
+        }
+
+        .theater-cta {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--theater-color), #6c3483);
+            text-align: center;
+        }
+
+        .user-cta h2, .theater-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .user-cta p, .theater-cta p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+        }
+
+        .btn-user {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-theater {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-user:hover {
+            background: #ffd700;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(245, 197, 24, 0.4);
+        }
+
+        .btn-theater:hover {
+            background: #ffd700;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(245, 197, 24, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gray);
+            border-radius: 50%;
+            color: var(--light);
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--gray);
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .steps {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .step:not(:last-child):after {
+                display: none;
+            }
+            
+            .auth-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-film"></i>
+                    Cine<span>Book</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#">Home</a>
+                    <a href="#">Movies</a>
+                    <a href="#">Theaters</a>
+                    <a href="#">Offers</a>
+                    <a th:href="@{/about}">About</a>
+                </div>
+                <div class="auth-buttons">
+                    <a th:href="@{/user/login}" class="btn btn-login">User</a>
+                    <a th:href="@{/theatre/login}" class="btn btn-signup">Theatre</a>
+                    <a th:href="@{/admin/login}" class="btn btn-admin">Admin</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Book Your Movie Tickets in Seconds</h1>
+                <p>Browse movies, select seats, and secure your tickets with our easy-to-use booking system. Experience cinema like never before.</p>
+             <!--   <div class="search-box">
+                    <input type="text" placeholder="Search for movies, theaters, or locations...">
+                    <button>Search</button>
+                </div>-->
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Core Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <h3>Browse Movies</h3>
+                    <p>Explore movies by date, genre, or theater. Find exactly what you're looking for with our advanced filtering.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>View Showtimes</h3>
+                    <p>Check available shows with date and time information for each theater. Never miss a screening again.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-couch"></i>
+                    </div>
+                    <h3>Select Seats</h3>
+                    <p>Choose your preferred seats with our interactive seat map. Get the best view in the house.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <h3>Book & Pay</h3>
+                    <p>Secure your tickets with our safe payment system. Multiple payment options available.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <h3>Admin Panel</h3>
+                    <p>Manage movies, theaters, shows, and seat availability with our comprehensive admin dashboard.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Booking History</h3>
+                    <p>Keep track of all your past bookings and easily rebook your favorite movies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Section -->
+    <section class="modules">
+        <div class="container">
+            <h2 class="section-title">System Modules</h2>
+            <div class="modules-grid">
+                <div class="module-card user-module">
+                    <h3><i class="fas fa-users module-icon"></i> User Module</h3>
+                    <p>User registration, login, profile management, and booking history tracking.</p>
+                </div>
+                <div class="module-card other-module">
+                    <h3><i class="fas fa-film module-icon"></i> Movie Module</h3>
+                    <p>CRUD operations on movies with details like title, genre, duration, rating, and posters.</p>
+                </div>
+                <div class="module-card theater-module">
+                    <h3><i class="fas fa-building module-icon"></i> Theater Module</h3>
+                    <p>Manage theaters with location details and comprehensive seat layout information.</p>
+                </div>
+                <div class="module-card admin-module">
+                    <h3><i class="fas fa-user-cog module-icon"></i> Admin Module</h3>
+                    <p>System administration, user management, and overall platform oversight.</p>
+                </div>
+                <div class="module-card other-module">
+                    <h3><i class="fas fa-chair module-icon"></i> Seat Booking Module</h3>
+                    <p>Select and lock seats for shows with real-time availability to prevent double booking.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Browse & Select</h3>
+                    <p>Find your favorite movie and choose a convenient showtime at your preferred theater.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Choose Seats</h3>
+                    <p>Select your seats from the interactive seat map to get the perfect viewing experience.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Book & Pay</h3>
+                    <p>Complete your booking with our secure payment system and receive instant confirmation.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Enjoy the Show</h3>
+                    <p>Present your e-ticket at the theater and enjoy your movie experience hassle-free.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User CTA Section -->
+    <section class="user-cta">
+        <div class="container">
+            <h2>Ready to Book Your Next Movie?</h2>
+            <p>Join thousands of movie lovers who use CineBook for their ticket booking needs. Fast, secure, and convenient.</p>
+            <a th:href="@{/user/login}" class="btn btn-user">Get Started as User</a>
+        </div>
+    </section>
+
+    <!-- Theater CTA Section -->
+    <section class="theater-cta">
+        <div class="container">
+            <h2>Are You a Theater Owner?</h2>
+            <p>Join our network of theaters and reach more customers with our advanced booking platform. Manage shows, seats, and bookings with ease.</p>
+            <a th:href="@{/theatre/login}" class="btn btn-theater">Register Your Theater</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CineBook</h3>
+                    <p>Your premier destination for online movie ticket booking. Experience cinema like never before.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">Theaters</a></li>
+                        <li><a href="#">Offers</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Booking Guide</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Cinema Street, Movie City</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope"></i> support@cinebook.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 CineBook Movie Ticket Booking System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple script for button interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search functionality
+            const searchButton = document.querySelector('.search-box button');
+            const searchInput = document.querySelector('.search-box input');
+            
+            searchButton.addEventListener('click', function() {
+                if(searchInput.value.trim() !== '') {
+                    alert(`Searching for: ${searchInput.value}`);
+                } else {
+                    alert('Please enter a search term');
+                }
+            });
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

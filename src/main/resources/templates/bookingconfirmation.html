@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Booking Confirmation</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .confirmation-box {
+            background: #fff;
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: #333;
+        }
+        .amount {
+            color: #4CAF50;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .btn-home {
+            display: inline-block;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn-home:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-box">
+        <h2>🎉 Booking Confirmed!</h2>
+        <p>Your booking has been successfully completed.</p>
+        <p>Total Amount Paid: <span class="amount" th:text="'₹ ' + ${amount}"></span></p>
+        <a class="btn-home" th:href="@{/list/movies}">Back to Movies</a>
+    </div>
+</body>
+</html>

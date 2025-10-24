@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Shows</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #232526, #414345);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+
+        h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #00d4ff;
+            color: black;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 212, 255, 0.1);
+        }
+
+        a, button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background: #00d4ff;
+            color: black;
+        }
+
+        .delete-btn {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        .add-btn {
+            background: #00ff99;
+            color: black;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Your Movie Shows</h2>
+
+<a th:href="@{/theatre/addShow}" class="add-btn">➕ Add New Show</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Movie</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="show : ${shows}">
+            <td th:text="${show.movie.title}"></td>
+            <td th:text="${show.showDate}"></td>
+            <td th:text="${show.showTime}"></td>
+            <td th:text="${show.price}"></td>
+            <td>
+                <a th:href="@{'/theatre/editShow/' + ${show.id}}" class="edit-btn">Edit</a>
+                <a th:href="@{'/theatre/deleteShow/' + ${show.id}}" class="delete-btn"
+                   onclick="return confirm('Delete this show?')">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

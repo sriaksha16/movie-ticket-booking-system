@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineBook - Theatre Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e50914;
+            --secondary: #141414;
+            --accent: #f5c518;
+            --light: #ffffff;
+            --dark: #000000;
+            --gray: #2c2c2c;
+            --light-gray: #f5f5f5;
+            --theater-color: #8e44ad;
+            --theater-dark: #6c3483;
+            --theater-light: #9b59b6;
+            --success: #2ecc71;
+            --error: #e74c3c;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: linear-gradient(rgba(20, 20, 20, 0.85), rgba(20, 20, 20, 0.85)), 
+                              url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgba(20, 20, 20, 0.95);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--theater-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-login {
+            background: var(--theater-color);
+            color: var(--light);
+        }
+
+        .btn-signup {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--theater-color);
+            color: var(--theater-color);
+        }
+
+        .btn-login:hover {
+            background: var(--theater-dark);
+        }
+
+        .btn-signup:hover {
+            background: rgba(142, 68, 173, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex: 1;
+            margin-top: 80px;
+            padding: 40px 0;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            display: flex;
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(135deg, var(--theater-color), var(--theater-dark));
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .login-left h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-left p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .features-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-list i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .partner-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            font-size: 2.2rem;
+            color: var(--theater-color);
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #b0b0b0;
+        }
+
+        .login-form {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--theater-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.2);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            background: none;
+            border: none;
+            color: #b0b0b0;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .password-toggle:hover {
+            color: var(--theater-color);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input {
+            accent-color: var(--theater-color);
+        }
+
+        .forgot-password {
+            color: var(--theater-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn-login-form {
+            width: 100%;
+            padding: 14px;
+            background: var(--theater-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login-form:hover {
+            background: var(--theater-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-login-form:active {
+            transform: translateY(0);
+        }
+
+        .btn-login-form.loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .divider span {
+            padding: 0 15px;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .partner-login {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .partner-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            color: var(--light);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .partner-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .api-btn:hover {
+            border-color: #4267B2;
+        }
+
+        .support-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .demo-accounts {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .demo-accounts h4 {
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .demo-account {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .demo-account:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .demo-account:last-child {
+            margin-bottom: 0;
+        }
+
+        .demo-account span {
+            color: #b0b0b0;
+        }
+
+        .demo-account .credentials {
+            font-family: monospace;
+            color: var(--theater-color);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #b0b0b0;
+        }
+
+        .register-link a {
+            color: var(--theater-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gray);
+            border-radius: 50%;
+            color: var(--light);
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--theater-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--gray);
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .login-container {
+                flex-direction: column;
+            }
+            
+            .login-left {
+                padding: 30px;
+            }
+            
+            .login-right {
+                padding: 30px;
+            }
+            
+            .partner-login {
+                flex-direction: column;
+            }
+        }
+
+        /* Animation for form elements */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-form > * {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-options { animation-delay: 0.3s; }
+        .btn-login-form { animation-delay: 0.4s; }
+        .divider { animation-delay: 0.5s; }
+        .partner-login { animation-delay: 0.6s; }
+        .demo-accounts { animation-delay: 0.7s; }
+        .register-link { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-film"></i>
+                    Cine<span>Book</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="#">Movies</a>
+                    <a href="#">Theaters</a>
+                    <a href="#">For Partners</a>
+                    <a href="#">About</a>
+                </div>
+                <!--<div class="auth-buttons">
+                   <a th:href="@{/theatre/login}" class="btn btn-login">Login</a>
+				   <a th:href="@{/theatreregister}" class="btn btn-signup">Register</a>
+                </div>-->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="login-container">
+                <div class="login-left">
+                    <h2>Partner Portal</h2>
+                    <p>Access your theatre management dashboard to manage shows, bookings, and analytics.</p>
+                    <div class="partner-badge">Exclusive Partner Access</div>
+                    
+                    <ul class="features-list">
+                        <li><i class="fas fa-chart-line"></i> Real-time analytics and reports</li>
+                        <li><i class="fas fa-calendar-alt"></i> Advanced show scheduling</li>
+                        <li><i class="fas fa-couch"></i> Seat layout management</li>
+                        <li><i class="fas fa-money-bill-wave"></i> Revenue tracking & insights</li>
+                        <li><i class="fas fa-ticket-alt"></i> Booking management system</li>
+                        <li><i class="fas fa-bullhorn"></i> Promotional tools</li>
+                    </ul>
+                </div>
+                
+                <div class="login-right">
+                    <div class="login-header">
+                        <h2>Theatre Login</h2>
+                        <p>Access your partner dashboard</p>
+                    </div>
+                    
+                    <form class="login-form" id="theatreLoginForm" th:action="@{/theatre/login}" method="post">
+                        <div class="form-group">
+                            <label for="theatre-username">Username or Email *</label>
+                            <input type="text" id="theatre-username" name="businessEmail" class="form-control" placeholder="Enter your username or email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="theatre-password">Password *</label>
+                            <input type="password" name="adminPassword" id="theatre-password" class="form-control" placeholder="Enter your password" required>
+                          
+                        </div>
+                        
+                       
+                        <button type="submit" class="btn-login-form" id="loginButton">
+                            <span id="loginText">Access Dashboard</span>
+                        </button>
+                    </form>
+                    
+                    <div class="divider">
+                        <span>partner tools</span>
+                    </div>
+                    
+                  
+                    
+                  
+                    <div class="register-link">
+                        New theatre partner?  <a th:href="@{/theatreregister}">Register your theatre here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CineBook</h3>
+                    <p>Your premier destination for online movie ticket booking. Experience cinema like never before.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">Theaters</a></li>
+                        <li><a href="#">For Partners</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Partner Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Partner Portal</a></li>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Business Tools</a></li>
+                        <li><a href="#">Marketing Resources</a></li>
+                        <li><a href="#">Support Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Cinema Street, Movie City</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope"></i> partners@cinebook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 9AM-6PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 CineBook Movie Ticket Booking System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Password visibility toggle
+        document.getElementById('passwordToggle').addEventListener('click', function() {
+            const passwordInput = document.getElementById('theatre-password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        // Demo account auto-fill
+        function fillDemoAccount(username, password) {
+            document.getElementById('theatre-username').value = username;
+            document.getElementById('theatre-password').value = password;
+            
+            // Show a brief notification
+            const notification = document.createElement('div');
+            notification.textContent = 'Demo credentials filled!';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                z-index: 10000;
+                animation: fadeInOut 3s ease;
+            `;
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translateY(-20px); }
+                20% { opacity: 1; transform: translateY(0); }
+                80% { opacity: 1; transform: translateY(0); }
+                100% { opacity: 0; transform: translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Form submission
+        document.getElementById('theatreLoginForm').addEventListener('submit', function(e) {
+        
+            
+            const username = document.getElementById('theatre-username').value;
+            const password = document.getElementById('theatre-password').value;
+            
+            // Simple validation
+            if (!username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('loginButton');
+            const loginText = document.getElementById('loginText');
+            submitBtn.classList.add('loading');
+            loginText.textContent = 'Authenticating...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // In a real application, you would send this data to a server
+                console.log('Theatre Login:', { username, password });
+               <!-- 
+                // Show success message
+                alert('Login successful! Redirecting to partner dashboard...');-->
+                
+                // Reset button
+                submitBtn.classList.remove('loading');
+                loginText.textContent = 'Access Dashboard';
+                submitBtn.disabled = false;
+                
+                // Redirect to dashboard (in a real app)
+                // window.location.href = 'theatre-dashboard.html';
+            }, 2000);
+        });
+        
+        // Partner tool handlers
+        document.querySelector('.api-btn').addEventListener('click', function() {
+            alert('Redirecting to API documentation and access portal...');
+        });
+        
+        document.querySelector('.support-btn').addEventListener('click', function() {
+            alert('Opening partner support portal...');
+        });
+        
+        // Forgot password handler
+        document.querySelector('.forgot-password').addEventListener('click', function(e) {
+            e.preventDefault();
+            const username = prompt('Please enter your theatre username or email to reset your password:');
+            if (username) {
+                alert(`Password reset instructions have been sent to the email associated with ${username}`);
+            }
+        });
+        
+        // Auto-focus on username field when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('theatre-username').focus();
+        });
+    </script>
+</body>
+</html>

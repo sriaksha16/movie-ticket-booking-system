@@ -1,0 +1,502 @@
+<!--<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add / Edit Movie</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        form {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        h2 {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        input[type="file"] {
+            background: transparent;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #00d4ff;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #fff;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+<form th:action="@{/admin/addMovie}" th:object="${movie}" method="post" enctype="multipart/form-data">
+    <h2 th:text="${movie.id != null} ? 'Edit Movie' : 'Add Movie'"></h2>
+
+    <input type="hidden" th:field="*{id}">
+
+    <label>Title</label>
+    <input type="text" th:field="*{title}" placeholder="Movie Title" required>
+
+    <label>Genre</label>
+    <input type="text" th:field="*{genre}" placeholder="Genre" required>
+
+    <label>Language</label>
+    <input type="text" th:field="*{language}" placeholder="Language" required>
+
+    <label>Duration</label>
+    <input type="text" th:field="*{duration}" placeholder="Duration (e.g. 2h 15m)" required>
+
+    <label>Description</label>
+    <textarea th:field="*{description}" rows="3" placeholder="Enter short movie description"></textarea>
+
+    <label>Upload Poster</label>
+    <input type="file" name="posterFile">
+	
+	<label>Total Rows</label>
+	<input type="number" th:field="*{totalRows}" placeholder="e.g. 10" min="1" required>
+
+	<label>Seats Per Row</label>
+	<input type="number" th:field="*{seatsPerRow}" placeholder="e.g. 15" min="1" required>
+
+
+    <button type="submit">Save Movie</button>
+</form>
+</body>
+</html>
+-->
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add / Edit Movie</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e50914;
+            --secondary: #141414;
+            --accent: #f5c518;
+            --light: #ffffff;
+            --dark: #000000;
+            --gray: #2c2c2c;
+            --light-gray: #f5f5f5;
+            --user-color: #4a90e2;
+            --theater-color: #8e44ad;
+            --admin-color: #27ae60;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .form-container {
+            background: rgba(20, 20, 20, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .form-header h2 {
+            color: var(--accent);
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .form-header p {
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .form-header i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #ddd;
+            font-size: 14px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: #aaa;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .file-input-container {
+            position: relative;
+        }
+        
+        .file-input-container input[type="file"] {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input-label:hover {
+            border-color: var(--primary);
+            background: rgba(229, 9, 20, 0.1);
+        }
+        
+        .file-input-label i {
+            color: var(--accent);
+        }
+        
+        .file-input-text {
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), #c40812);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #ff0a16, var(--primary));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-link a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+        
+        .back-link a:hover {
+            color: var(--accent);
+        }
+        
+        .notification {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .notification.success {
+            background: rgba(39, 174, 96, 0.2);
+            border: 1px solid var(--admin-color);
+            color: #2ecc71;
+        }
+        
+        .notification.error {
+            background: rgba(229, 9, 20, 0.2);
+            border: 1px solid var(--primary);
+            color: #ff6b6b;
+        }
+        
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <i class="fas fa-film"></i>
+            <h2 th:text="${movie.id != null} ? 'Edit Movie' : 'Add New Movie'">Add Movie</h2>
+            <p th:text="${movie.id != null} ? 'Update movie information' : 'Fill in the details to add a new movie'">Fill in the details to add a new movie</p>
+        </div>
+        
+        <div class="notification success" id="success-notification">
+            <i class="fas fa-check-circle"></i> Movie saved successfully!
+        </div>
+        
+        <div class="notification error" id="error-notification">
+            <i class="fas fa-exclamation-circle"></i> Please fill all required fields.
+        </div>
+        
+        <form th:action="@{/admin/addMovie}" th:object="${movie}" method="post" enctype="multipart/form-data" id="movie-form">
+            <input type="hidden" th:field="*{id}">
+            
+            <div class="form-group">
+                <label for="title">Movie Title <span class="required">*</span></label>
+                <input type="text" th:field="*{title}" id="title" placeholder="Enter movie title" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="genre">Genre <span class="required">*</span></label>
+                    <input type="text" th:field="*{genre}" id="genre" placeholder="e.g. Action, Drama" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="language">Language <span class="required">*</span></label>
+                    <input type="text" th:field="*{language}" id="language" placeholder="e.g. English, Hindi" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="duration">Duration <span class="required">*</span></label>
+                <input type="text" th:field="*{duration}" id="duration" placeholder="e.g. 2h 15m" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea th:field="*{description}" id="description" rows="3" placeholder="Enter movie plot or description"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Upload Poster</label>
+                <div class="file-input-container">
+                    <label class="file-input-label" for="posterFile">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span class="file-input-text" id="file-text">Choose poster image</span>
+                    </label>
+                    <input type="file" name="posterFile" id="posterFile" accept="image/*" style="display: none;">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="totalRows">Total Rows <span class="required">*</span></label>
+                    <input type="number" th:field="*{totalRows}" id="totalRows" placeholder="e.g. 10" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="seatsPerRow">Seats Per Row <span class="required">*</span></label>
+                    <input type="number" th:field="*{seatsPerRow}" id="seatsPerRow" placeholder="e.g. 15" min="1" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-save"></i>
+                <span th:text="${movie.id != null} ? 'Update Movie' : 'Save Movie'">Save Movie</span>
+            </button>
+        </form>
+        
+        <div class="back-link">
+            <a href="#"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // File input display
+            const fileInput = document.getElementById('posterFile');
+            const fileText = document.getElementById('file-text');
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileText.textContent = this.files[0].name;
+                } else {
+                    fileText.textContent = 'Choose poster image';
+                }
+            });
+            
+            // Form validation
+            const form = document.getElementById('movie-form');
+            const successNotification = document.getElementById('success-notification');
+            const errorNotification = document.getElementById('error-notification');
+            
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                const requiredFields = form.querySelectorAll('[required]');
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.style.borderColor = 'var(--primary)';
+                    } else {
+                        field.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    errorNotification.style.display = 'block';
+                    successNotification.style.display = 'none';
+                    
+                    // Hide error notification after 3 seconds
+                    setTimeout(() => {
+                        errorNotification.style.display = 'none';
+                    }, 3000);
+                } else {
+                    // In a real application, this would be handled by the server
+                    // successNotification.style.display = 'block';
+                    // errorNotification.style.display = 'none';
+                }
+            });
+            
+            // Auto-hide notifications
+            setTimeout(() => {
+                successNotification.style.display = 'none';
+                errorNotification.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

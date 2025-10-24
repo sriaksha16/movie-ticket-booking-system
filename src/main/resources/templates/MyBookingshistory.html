@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>My Bookings</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #232526, #414345);
+      color: #fff;
+      margin: 0;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      color: #f9d423;
+      font-size: 2.4rem;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 85%;
+      margin: auto;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    th, td {
+      padding: 14px 18px;
+      text-align: center;
+    }
+    th {
+      background: #f9d423;
+      color: #000;
+      font-size: 1.1rem;
+    }
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    tr:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transition: 0.3s ease-in-out;
+    }
+    td {
+      font-size: 1rem;
+    }
+
+    /* 🎟️ Cancel Button Styling */
+    .cancel-btn {
+      background: linear-gradient(135deg, #ff4b1f, #ff9068);
+      border: none;
+      border-radius: 25px;
+      color: #fff;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    }
+    .cancel-btn:hover {
+      background: linear-gradient(135deg, #ff9068, #ff4b1f);
+      transform: scale(1.08);
+      box-shadow: 0 5px 15px rgba(255, 144, 104, 0.6);
+    }
+
+    .no-bookings {
+      text-align: center;
+      font-size: 1.2rem;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 My Booking History</h1>
+
+  <div th:if="${#lists.isEmpty(bookings)}" class="no-bookings">
+    <p>No bookings found.</p>
+  </div>
+
+  <div th:if="${!#lists.isEmpty(bookings)}">
+    <table>
+      <tr>
+        <th>Movie</th>
+        <th>Date</th>
+        <th>Seat</th>
+        <th>Amount</th>
+        <th>Action</th>
+      </tr>
+
+      <tr th:each="booking : ${bookings}">
+        <td th:text="${booking.movieTitle}"></td>
+        <td th:text="${booking.bookingDate}"></td>
+        <td th:text="${booking.seat != null ? booking.seat.seatNo : 'N/A'}"></td>
+        <td th:text="'₹' + ${booking.totalAmount}"></td>
+
+        <!-- 🎟️ Cancel Booking Button -->
+        <td>
+          <form th:action="@{'/cancel-booking/' + ${booking.id}}" method="post" 
+                onsubmit="return confirm('Are you sure you want to cancel booking for Seat ' + 
+                /*[[${booking.seat != null ? booking.seat.seatNo : ''}]]*/ '?');">
+            <button type="submit" class="cancel-btn">Cancel Booking</button>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

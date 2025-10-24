@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Show</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #74ABE2, #5563DE);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 400px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        select, input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #5563DE;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #3d4cb3;
+        }
+    </style>
+</head>
+<body>
+    <form th:action="@{/theatre/addShow}" method="post" th:object="${show}">
+        <h2>Add New Show</h2>
+
+        <label>Select Movie:</label>
+        <select name="movieId" required>
+            <option value="">--Select Movie--</option>
+            <option th:each="movie : ${movies}" th:value="${movie.id}" th:text="${movie.title}"></option>
+        </select>
+
+        <label>Date:</label>
+        <input type="date" th:field="*{showDate}" required>
+
+        <label>Time:</label>
+        <input type="time" th:field="*{showTime}" required>
+
+        <label>Price:</label>
+        <input type="number" th:field="*{price}" required>
+
+        <button type="submit">Add Show</button>
+    </form>
+</body>
+</html>

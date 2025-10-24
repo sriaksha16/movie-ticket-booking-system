@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Settings | CineBook Admin</title>
+    <style>
+        body {
+            background: linear-gradient(145deg, #0f2027, #203a43, #2c5364);
+            font-family: "Poppins", sans-serif;
+            color: white;
+            padding: 40px;
+        }
+        h2 {
+            text-align: center;
+            color: #00d4ff;
+        }
+        .settings-container {
+            width: 60%;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,212,255,0.3);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+        }
+        button {
+            background: #00d4ff;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h2>⚙️ System Settings</h2>
+
+    <div class="settings-container">
+        <form th:action="@{/admin/settings/update}" method="post">
+            <label>Website Name</label>
+            <input type="text" name="siteName" placeholder="Enter Site Name">
+
+            <label>Support Email</label>
+            <input type="email" name="supportEmail" placeholder="support@cinebook.com">
+
+            <label>Theme Color</label>
+            <select name="themeColor">
+                <option>Blue Neon</option>
+                <option>Dark Red</option>
+                <option>Emerald Green</option>
+            </select>
+
+            <button type="submit">Save Settings</button>
+        </form>
+    </div>
+</body>
+</html>

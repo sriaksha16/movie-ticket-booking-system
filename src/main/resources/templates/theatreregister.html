@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineBook - Theatre Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e50914;
+            --secondary: #141414;
+            --accent: #f5c518;
+            --light: #ffffff;
+            --dark: #000000;
+            --gray: #2c2c2c;
+            --light-gray: #f5f5f5;
+            --theater-color: #8e44ad;
+            --theater-dark: #6c3483;
+            --theater-light: #9b59b6;
+            --success: #2ecc71;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: linear-gradient(rgba(20, 20, 20, 0.9), rgba(20, 20, 20, 0.9)), 
+                              url('https://images.unsplash.com/photo-1549576490-b0b4831ef60a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgba(20, 20, 20, 0.95);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--theater-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--theater-color);
+            color: var(--theater-color);
+        }
+
+        .btn-signup {
+            background: var(--theater-color);
+            color: var(--light);
+        }
+
+        .btn-login:hover {
+            background: var(--theater-color);
+            color: white;
+        }
+
+        .btn-signup:hover {
+            background: var(--theater-dark);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex: 1;
+            margin-top: 80px;
+            padding: 40px 0;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .registration-container {
+            display: flex;
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .registration-left {
+            flex: 1;
+            background: linear-gradient(135deg, var(--theater-color), var(--theater-dark));
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .registration-left h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .registration-left p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .benefits-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .benefits-list i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .registration-right {
+            flex: 1.2;
+            padding: 50px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            color: var(--theater-color);
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #b0b0b0;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 33%;
+            height: 4px;
+            background: var(--theater-color);
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active .step-number {
+            background: var(--theater-color);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: #b0b0b0;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--theater-color);
+            font-weight: 600;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--theater-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.2);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .facility-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .facility-option input {
+            accent-color: var(--theater-color);
+        }
+
+        .password-strength {
+            margin-top: 5px;
+            height: 5px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .password-weak .password-strength-bar {
+            width: 30%;
+            background: #e74c3c;
+        }
+
+        .password-medium .password-strength-bar {
+            width: 60%;
+            background: #f39c12;
+        }
+
+        .password-strong .password-strength-bar {
+            width: 100%;
+            background: var(--success);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn-prev, .btn-next, .btn-submit {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-prev {
+            background: transparent;
+            color: var(--theater-color);
+            border: 1px solid var(--theater-color);
+        }
+
+        .btn-prev:hover {
+            background: rgba(142, 68, 173, 0.1);
+        }
+
+        .btn-next, .btn-submit {
+            background: var(--theater-color);
+            color: white;
+        }
+
+        .btn-next:hover, .btn-submit:hover {
+            background: var(--theater-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-submit {
+            width: 100%;
+        }
+
+        .terms-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .terms-check input {
+            margin-top: 3px;
+        }
+
+        .terms-check label {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .terms-check a {
+            color: var(--theater-color);
+            text-decoration: none;
+        }
+
+        .terms-check a:hover {
+            text-decoration: underline;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #b0b0b0;
+        }
+
+        .login-link a {
+            color: var(--theater-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Screen Configuration */
+        .screen-configuration {
+            margin-top: 20px;
+        }
+
+        .screen-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--theater-color);
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .screen-header h4 {
+            color: var(--theater-color);
+        }
+
+        .remove-screen {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .remove-screen:hover {
+            background: rgba(231, 76, 60, 0.3);
+        }
+
+        .add-screen {
+            background: rgba(142, 68, 173, 0.2);
+            color: var(--theater-color);
+            border: 1px dashed var(--theater-color);
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .add-screen:hover {
+            background: rgba(142, 68, 173, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gray);
+            border-radius: 50%;
+            color: var(--light);
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--theater-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--gray);
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .registration-container {
+                flex-direction: column;
+            }
+            
+            .registration-left {
+                padding: 30px;
+            }
+            
+            .registration-right {
+                padding: 30px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .facilities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-film"></i>
+                    Cine<span>Book</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="#">Movies</a>
+                    <a href="#">Theaters</a>
+                    <a href="#">For Partners</a>
+                    <a href="#">About</a>
+                </div>
+				<!--<div class="auth-buttons">
+				    <a th:href="@{/theatre/login}" class="btn btn-login">Login</a>
+				    <a th:href="@{/theatreregister}" class="btn btn-signup">Register</a>
+				</div>-->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="registration-container">
+                <div class="registration-left">
+                    <h2>Join Our Theatre Network</h2>
+                    <p>Register your theatre to reach thousands of movie lovers and grow your business with CineBook.</p>
+                    
+                    <ul class="benefits-list">
+                        <li><i class="fas fa-users"></i> Access to thousands of potential customers</li>
+                        <li><i class="fas fa-chart-line"></i> Advanced analytics and reporting</li>
+                        <li><i class="fas fa-cogs"></i> Easy show and seat management</li>
+                        <li><i class="fas fa-money-bill-wave"></i> Fast and secure payment processing</li>
+                        <li><i class="fas fa-headset"></i> Dedicated partner support</li>
+                        <li><i class="fas fa-bullhorn"></i> Marketing and promotional tools</li>
+                    </ul>
+                </div>
+                
+                <div class="registration-right">
+                    <div class="form-header">
+                        <h2>Theatre Registration</h2>
+                        <p>Complete your theatre details to join our platform</p>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Business</div>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Facilities</div>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Account</div>
+                        </div>
+                    </div>
+                    
+					<form id="theatreRegistrationForm" th:action="@{/theatreregisterr}" method="post">
+					    <!-- Step 1 -->
+					    <div class="form-group">
+					        <label for="theatre-name">Theatre Name *</label>
+					        <input type="text" id="theatre-name" name="theatreName" class="form-control" required>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="theatre-type">Theatre Type *</label>
+					        <select id="theatre-type" name="theatreType" class="form-control" required>
+					            <option value="">Select theatre type</option>
+					            <option value="multiplex">Multiplex</option>
+					            <option value="single-screen">Single Screen</option>
+					            <option value="drive-in">Drive-in</option>
+					            <option value="premium">Premium</option>
+					            <option value="imax">IMAX</option>
+					        </select>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="owner-name">Owner Name *</label>
+					        <input type="text" id="owner-name" name="ownerName" class="form-control" required>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="established-year">Established Year</label>
+					        <input type="number" id="established-year" name="establishedYear" class="form-control">
+					    </div>
+
+					    <div class="form-group">
+					        <label for="business-email">Business Email *</label>
+					        <input type="email" id="business-email" name="businessEmail" class="form-control" required>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="business-phone">Business Phone *</label>
+					        <input type="tel" id="business-phone" name="businessPhone" class="form-control" required>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="theatre-address">Theatre Address *</label>
+					        <textarea id="theatre-address" name="theatreAddress" class="form-control" required></textarea>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="theatre-city">City *</label>
+					        <input type="text" id="theatre-city" name="theatreCity" class="form-control" required>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="theatre-state">State *</label>
+					        <input type="text" id="theatre-state" name="theatreState" class="form-control" required>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="theatre-zip">ZIP Code *</label>
+					        <input type="text" id="theatre-zip" name="theatreZip" class="form-control" required>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="total-screens">Total Screens *</label>
+					        <input type="number" id="total-screens" name="totalScreens" class="form-control" required>
+					    </div>
+
+					    <!-- Example for facilities (checkboxes) -->
+					    <input type="checkbox" name="facilities" value="Parking"> Parking
+					    <input type="checkbox" name="facilities" value="Food Court"> Food Court
+					    <input type="checkbox" name="facilities" value="3D"> 3D Projection
+
+					    <div class="form-group">
+					        <label for="admin-username">Admin Username *</label>
+					        <input type="text" id="admin-username" name="adminUsername" class="form-control" required>
+					    </div>
+
+					    <div class="form-group">
+					        <label for="admin-password">Admin Password *</label>
+					        <input type="password" id="admin-password" name="adminPassword" class="form-control" required>
+					    </div>
+
+					    <button type="submit" class="btn-submit">Register Theatre</button>
+					</form>
+
+                    <div class="login-link">
+                        Already have a theatre account? <a th:href="@{/theatre/login}">Sign in here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CineBook</h3>
+                    <p>Your premier destination for online movie ticket booking. Experience cinema like never before.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">Theaters</a></li>
+                        <li><a href="#">For Partners</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Partner Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Partner Portal</a></li>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Business Tools</a></li>
+                        <li><a href="#">Marketing Resources</a></li>
+                        <li><a href="#">Support Center</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Cinema Street, Movie City</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope"></i> partners@cinebook.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 CineBook Movie Ticket Booking System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Multi-step form functionality
+        function nextStep(step) {
+            // Hide current step
+            document.querySelector('.form-step.active').classList.remove('active');
+            
+            // Show next step
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            // Update progress bar
+            updateProgressBar(step);
+        }
+        
+        function prevStep(step) {
+            // Hide current step
+            document.querySelector('.form-step.active').classList.remove('active');
+            
+            // Show previous step
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            // Update progress bar
+            updateProgressBar(step);
+        }
+        
+        function updateProgressBar(step) {
+            // Reset all steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Activate steps up to current step
+            for (let i = 1; i <= step; i++) {
+                document.querySelector(`.progress-step[data-step="${i}"]`).classList.add('active');
+            }
+            
+            // Update progress line
+            const progressPercentage = ((step - 1) / 2) * 100;
+            document.querySelector('.progress-bar').style.setProperty('--progress-width', `${progressPercentage}%`);
+        }
+        
+        // Password strength indicator
+        document.getElementById('admin-password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.querySelector('.password-strength-bar');
+            const strengthContainer = document.querySelector('.password-strength');
+            
+            // Reset classes
+            strengthContainer.classList.remove('password-weak', 'password-medium', 'password-strong');
+            
+            if (password.length === 0) {
+                strengthBar.style.width = '0%';
+                return;
+            }
+            
+            // Calculate password strength
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 25;
+            
+            // Lowercase and uppercase check
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 25;
+            
+            // Numbers check
+            if (/\d/.test(password)) strength += 25;
+            
+            // Special characters check
+            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+            
+            // Update strength bar
+            strengthBar.style.width = `${strength}%`;
+            
+            // Add appropriate class
+            if (strength <= 30) {
+                strengthContainer.classList.add('password-weak');
+            } else if (strength <= 70) {
+                strengthContainer.classList.add('password-medium');
+            } else {
+                strengthContainer.classList.add('password-strong');
+            }
+        });
+        
+        // Form submission
+        document.getElementById('theatreRegistrationForm').addEventListener('submit', function(e) {
+           
+            
+            // Get form values
+            const password = document.getElementById('admin-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match! Please check your password confirmation.');
+                return;
+            }
+            
+            // Check if terms are accepted
+            if (!document.getElementById('theatre-terms').checked) {
+                alert('You must accept the Partner Terms of Service to continue.');
+                return;
+            }
+            
+            // Collect facilities
+            const facilities = [];
+            if (document.getElementById('facility-parking').checked) facilities.push('Parking');
+            if (document.getElementById('facility-food').checked) facilities.push('Food Court');
+            if (document.getElementById('facility-3d').checked) facilities.push('3D Projection');
+            if (document.getElementById('facility-dolby').checked) facilities.push('Dolby Atmos');
+            if (document.getElementById('facility-wheelchair').checked) facilities.push('Wheelchair Access');
+            if (document.getElementById('facility-online').checked) facilities.push('Online Booking');
+            
+            // In a real application, you would send this data to a server
+            console.log('Theatre Registration:', {
+                theatreName: document.getElementById('theatre-name').value,
+                theatreType: document.getElementById('theatre-type').value,
+                ownerName: document.getElementById('owner-name').value,
+                establishedYear: document.getElementById('established-year').value,
+                businessEmail: document.getElementById('business-email').value,
+                businessPhone: document.getElementById('business-phone').value,
+                address: document.getElementById('theatre-address').value,
+                city: document.getElementById('theatre-city').value,
+                state: document.getElementById('theatre-state').value,
+                zip: document.getElementById('theatre-zip').value,
+                totalScreens: document.getElementById('total-screens').value,
+                facilities: facilities,
+                adminUsername: document.getElementById('admin-username').value,
+                password: password,
+                newsletter: document.getElementById('theatre-newsletter').checked
+            });
+            
+            // Show success message
+            alert('Theatre registration submitted successfully! Our partner team will review your application and contact you within 2 business days.');
+            
+            // Redirect to login page
+            setTimeout(() => {
+                window.location.href = 'theatre-login.html';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

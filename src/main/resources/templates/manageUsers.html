@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users | CineBook Admin</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #141e30, #243b55);
+            font-family: "Poppins", sans-serif;
+            color: #e0e0e0;
+            padding: 40px;
+            margin: 0;
+        }
+        h2 {
+            color: #00d4ff;
+            text-align: center;
+            font-size: 2.2em;
+            text-shadow: 0 0 10px #00d4ff;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+        }
+        th {
+            background: rgba(0, 212, 255, 0.25);
+            color: #00e6ff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        tr {
+            transition: all 0.3s ease;
+        }
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        tr:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: scale(1.01);
+        }
+        .status {
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: inline-block;
+            min-width: 80px;
+        }
+        .active {
+            background-color: #00ff99;
+            color: #003322;
+            box-shadow: 0 0 10px #00ff99;
+        }
+        footer {
+            text-align: center;
+            color: #aaa;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h2>👥 View Users</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.fname}"></td>
+                <td th:text="${user.lname}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.phone}"></td>
+                <td><span class="status active">Active</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer>
+        © 2025 CineBook Admin Dashboard
+    </footer>
+</body>
+</html>

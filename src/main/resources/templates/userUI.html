@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineBook - User Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 🌈 CSS Variables */
+        :root {
+            --primary: #00e1ff;
+            --primary-dark: #0077ff;
+            --secondary: #ff2d75;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --light: rgba(255, 255, 255, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-hover: rgba(255, 255, 255, 0.12);
+        }
+        
+        /* 🌟 General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 🎭 Header Styles */
+        header {
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo i {
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        nav a:hover, nav a.active {
+            color: white;
+            background: rgba(0, 225, 255, 0.15);
+            box-shadow: 0 0 15px rgba(0, 225, 255, 0.3);
+        }
+        
+        nav a i {
+            font-size: 18px;
+        }
+
+        /* 📱 Main Content */
+        .content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-title i {
+            color: var(--primary);
+        }
+
+        /* 🎴 Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: var(--card-hover);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 🎬 Movie Grid - UPDATED for your dynamic data */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .movie {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            transition: all 0.4s ease;
+        }
+        
+        .movie:hover {
+            transform: translateY(-8px);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.5s ease;
+        }
+        
+        .movie:hover .movie-poster {
+            transform: scale(1.05);
+        }
+
+        .movie-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            padding: 25px 20px 20px;
+            transform: translateY(5px);
+            transition: all 0.4s ease;
+        }
+        
+        .movie:hover .movie-overlay {
+            transform: translateY(0);
+        }
+
+        .movie h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .movie-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .movie-info p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .movie-info i {
+            color: var(--primary);
+            width: 16px;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+        
+        .book-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(0, 225, 255, 0.5);
+        }
+
+        /* 🎫 Booking History Table */
+        .booking-card {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 18px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-confirmed {
+            background: rgba(0, 255, 157, 0.2);
+            color: #00ff9d;
+        }
+        
+        .status-pending {
+            background: rgba(255, 200, 0, 0.2);
+            color: #ffcc00;
+        }
+
+        /* 👤 Profile Card */
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 40px 30px;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 50px;
+            color: white;
+            box-shadow: 0 0 30px rgba(0, 225, 255, 0.4);
+        }
+        
+        .profile-info {
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+        
+        .profile-label {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .profile-value {
+            font-weight: 600;
+        }
+        
+        .edit-btn {
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+            box-shadow: 0 0 20px rgba(0, 225, 255, 0.4);
+        }
+
+        /* 📑 Tabs Section */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        /* 🦶 Footer */
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.4);
+            margin-top: 50px;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        
+        /* 📱 Responsive Design */
+        @media (max-width: 1024px) {
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+            }
+            
+            .section-title {
+                font-size: 26px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .movie-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav a span {
+                display: none;
+            }
+            
+            nav a {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-film"></i>
+            <h1>CineBook</h1>
+        </div>
+        <nav>
+            <a href="#" class="tab-link active" data-tab="movies">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Movies</span>
+            </a>
+           
+			
+			<a th:href="@{/user/bookings}" class="tab-link">
+			    <i class="fas fa-receipt"></i>
+			    <span>My Bookings</span>
+			</a>
+
+			
+			
+            <a th:href="@{/user/profile}" class="tab-link" data-tab="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+            <a th:href="@{/user/logout}">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </header>
+
+    <div class="content">
+        <!-- 🎬 Available Shows Section - UPDATED to match your dynamic data structure -->
+        <div id="movies" class="tab-content active">
+            <h2 class="section-title">
+                <i class="fas fa-film"></i>
+                Now Showing
+            </h2>
+            <div class="movie-grid">
+                <div class="movie card" th:each="show : ${shows}">
+                    <img th:src="@{${show.movie.poster}}" alt="Movie Poster" class="movie-poster">
+                    <div class="movie-overlay">
+                        <h3 th:text="${show.movie.title}">Movie Title</h3>
+                        <div class="movie-info">
+                            <p><i class="fas fa-theater-masks"></i> <span th:text="${show.theatre.theatreName}">Theatre Name</span></p>
+                            <p><i class="far fa-calendar-alt"></i> <span th:text="${show.date}">Show Date</span></p>
+                            <p><i class="far fa-clock"></i> <span th:text="${show.showTime}">Show Time</span></p>
+                            <p><i class="fas fa-tag"></i> <span>₹<span th:text="${show.price}">Price</span></span></p>
+                        </div>
+                        <form th:action="@{/user/book}" method="get">
+                            <input type="hidden" name="showId" th:value="${show.id}">
+                            <button class="book-btn">
+                                <i class="fas fa-ticket-alt"></i>
+                                Book Now
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+    <footer>
+        <p>© 2025 CineBook | Movie Ticket Booking System</p>
+    </footer>
+
+    <script>
+        // Tab Navigation
+        const tabs = document.querySelectorAll('.tab-link');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', e => {
+           
+
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const target = tab.getAttribute('data-tab');
+                contents.forEach(c => c.classList.remove('active'));
+                document.getElementById(target).classList.add('active');
+                
+                // Scroll to top when switching tabs
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to movie cards
+            const movieCards = document.querySelectorAll('.movie');
+            
+            movieCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

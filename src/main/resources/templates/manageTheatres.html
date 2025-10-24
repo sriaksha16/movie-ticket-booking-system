@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Theatres | CineBook Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: "Poppins", sans-serif;
+            color: #fff;
+            padding: 40px;
+        }
+        h2 {
+            color: #00d4ff;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        th {
+            background: rgba(0, 212, 255, 0.3);
+        }
+        button {
+            background: #00d4ff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #000;
+        }
+        button.reject {
+            background: #ff4444;
+        }
+        button:hover {
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h2>🏢 Manage Theatres</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Theatre Name</th>
+                <th>Owner</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+		<tbody>
+		    <tr th:each="theatre : ${pendingTheatres}">
+		        <td th:text="${theatre.theatreName}"></td>
+		        <td th:text="${theatre.ownerName}"></td>
+		        <td th:text="${theatre.theatreAddress}"></td>
+		        <td th:text="${theatre.status}"></td>
+		        <td>
+
+					<form th:action="@{'/admin/approveTheatre/' + ${theatre.id}}" method="post" style="display:inline;">
+					    <button>Approve</button>
+					</form>
+
+					<form th:action="@{'/admin/rejectTheatre/' + ${theatre.id}}" method="post" style="display:inline;">
+					    <button class="reject">Reject</button>
+					</form>
+
+
+		        </td>
+		    </tr>
+		</tbody>
+
+    </table>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Seat Selection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f8f9fa; text-align: center; }
+        .seat { display: inline-block; width: 40px; height: 40px; margin: 5px; border-radius: 6px; line-height: 40px; cursor: pointer; }
+        .available { background-color: #74ebd5; color: white; }
+        .booked { background-color: #ff6b6b; color: white; cursor: not-allowed; }
+        .selected { background-color: #1dd1a1; }
+        .screen { background: #333; color: white; padding: 8px; margin: 20px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<h2 th:text="'Select Seats for ' + ${show.movie.title}"></h2>
+<div class="screen">SCREEN THIS WAY</div>
+
+<form th:action="@{/user/book/confirm}" method="post">
+    <input type="hidden" name="showId" th:value="${show.id}" />
+
+    <div th:each="seat : ${seats}">
+        <label th:class="'seat ' + (${seat.status} == 'available' ? 'available' : 'booked')">
+            <input type="checkbox"
+                   th:value="${seat.id}"
+                   name="selectedSeats"
+                   th:disabled="${seat.status} == 'booked'"
+                   style="display:none;">
+            <span th:text="${seat.seatNo}"></span>
+        </label>
+        <span th:if="${#numbers.sequence(5,5,1)}"></span>
+    </div>
+
+    <br><br>
+    <button type="submit" style="padding:10px 20px; border:none; border-radius:8px; background:#764ba2; color:white; cursor:pointer;">Confirm Booking</button>
+</form>
+
+<script>
+document.querySelectorAll('.available').forEach(seat => {
+  seat.addEventListener('click', () => {
+    const checkbox = seat.querySelector('input');
+    if (!checkbox.disabled) {
+      checkbox.checked = !checkbox.checked;
+      seat.classList.toggle('selected');
+    }
+  });
+});
+</script>
+
+</body>
+</html>

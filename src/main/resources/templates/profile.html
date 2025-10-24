@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineBook | My Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 🎨 Root Variables */
+        :root {
+            --primary: #00e1ff;
+            --primary-dark: #0077ff;
+            --secondary: #ff2d75;
+            --bg: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            --glass: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(15, 32, 39, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* 🌈 Profile Card Container */
+        .profile-card {
+            width: 95%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 225, 255, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 👤 Profile Header */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        /* Avatar */
+        .avatar-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            color: white;
+            box-shadow: 0 0 25px rgba(0, 225, 255, 0.4);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .avatar::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, var(--primary), transparent, var(--secondary));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.7;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(0, 225, 255, 0.7);
+        }
+
+        /* User Info */
+        .user-info h2 {
+            font-size: 32px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .user-info .role {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            position: relative;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 🧾 Profile Details Section */
+        .profile-details {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Details Grid */
+        .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 22px 25px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 20px rgba(0, 225, 255, 0.2);
+        }
+
+        .detail-item:hover::before {
+            opacity: 1;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-label i {
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .detail-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            padding-left: 24px;
+        }
+
+        /* 🎛️ Buttons */
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-edit {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 225, 255, 0.3);
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 225, 255, 0.5);
+        }
+
+        /* Decorative Elements */
+        .decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 45, 117, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .decoration-1 {
+            top: -50px;
+            right: -50px;
+        }
+
+        .decoration-2 {
+            bottom: -80px;
+            left: -80px;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(0, 225, 255, 0.1) 0%, transparent 70%);
+        }
+
+        /* 📱 Responsive */
+        @media (max-width: 768px) {
+            .profile-card {
+                padding: 30px 20px;
+            }
+            
+            .details {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .avatar {
+                width: 140px;
+                height: 140px;
+                font-size: 60px;
+            }
+            
+            .user-info h2 {
+                font-size: 28px;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-card {
+                padding: 25px 15px;
+            }
+            
+            .avatar {
+                width: 120px;
+                height: 120px;
+                font-size: 50px;
+            }
+            
+            .user-info h2 {
+                font-size: 24px;
+            }
+            
+            .detail-item {
+                padding: 18px 20px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+        <div class="decoration decoration-1"></div>
+        <div class="decoration decoration-2"></div>
+        
+        <div class="profile-header">
+            <div class="avatar-container">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+
+            <div class="user-info">
+                <h2 th:text="${user.fullname}">John Doe</h2>
+                <p class="role">CineBook Premium Member</p>
+            </div>
+        </div>
+
+        <div class="profile-details">
+            <h3 class="section-title">Personal Information</h3>
+            
+            <div class="details">
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-user"></i> Full Name</span>
+                    <span class="detail-value" th:text="${user.fname + ' ' + user.lname}">John Doe</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-envelope"></i> Email</span>
+                    <span class="detail-value" th:text="${user.email}">johndoe@example.com</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-phone"></i> Phone</span>
+                    <span class="detail-value" th:text="${user.phone}">+91 98765 43210</span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-calendar"></i> Date of Birth</span>
+                    <span class="detail-value" th:text="${user.dob}">January 12, 1990</span>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a th:href="@{/user/edit}" class="btn btn-edit"><i class="fas fa-edit"></i> Edit Profile</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

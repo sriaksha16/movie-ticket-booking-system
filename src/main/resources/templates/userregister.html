@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineBook - User Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e50914;
+            --secondary: #141414;
+            --accent: #f5c518;
+            --light: #ffffff;
+            --dark: #000000;
+            --gray: #2c2c2c;
+            --light-gray: #f5f5f5;
+            --user-color: #4a90e2;
+            --user-dark: #2c5aa0;
+            --success: #2ecc71;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: linear-gradient(rgba(20, 20, 20, 0.9), rgba(20, 20, 20, 0.9)), 
+                              url('https://images.unsplash.com/photo-1489599809505-fc3c9a6c8c6a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgba(20, 20, 20, 0.95);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--user-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--user-color);
+            color: var(--user-color);
+        }
+
+        .btn-signup {
+            background: var(--user-color);
+            color: var(--light);
+        }
+
+        .btn-login:hover {
+            background: var(--user-color);
+            color: white;
+        }
+
+        .btn-signup:hover {
+            background: var(--user-dark);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex: 1;
+            margin-top: 80px;
+            padding: 40px 0;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .registration-container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .registration-left {
+            flex: 1;
+            background: linear-gradient(135deg, var(--user-color), var(--user-dark));
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+        }
+
+        .registration-left h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .registration-left p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .benefits-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .benefits-list i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .registration-right {
+            flex: 1;
+            padding: 50px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            color: var(--user-color);
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #b0b0b0;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 33%;
+            height: 4px;
+            background: var(--user-color);
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active .step-number {
+            background: var(--user-color);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            color: #b0b0b0;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--user-color);
+            font-weight: 600;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--user-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .password-strength {
+            margin-top: 5px;
+            height: 5px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .password-weak .password-strength-bar {
+            width: 30%;
+            background: #e74c3c;
+        }
+
+        .password-medium .password-strength-bar {
+            width: 60%;
+            background: #f39c12;
+        }
+
+        .password-strong .password-strength-bar {
+            width: 100%;
+            background: var(--success);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn-prev, .btn-next, .btn-submit {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-prev {
+            background: transparent;
+            color: var(--user-color);
+            border: 1px solid var(--user-color);
+        }
+
+        .btn-prev:hover {
+            background: rgba(74, 144, 226, 0.1);
+        }
+
+        .btn-next, .btn-submit {
+            background: var(--user-color);
+            color: white;
+        }
+
+        .btn-next:hover, .btn-submit:hover {
+            background: var(--user-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-submit {
+            width: 100%;
+        }
+
+        .terms-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .terms-check input {
+            margin-top: 3px;
+        }
+
+        .terms-check label {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .terms-check a {
+            color: var(--user-color);
+            text-decoration: none;
+        }
+
+        .terms-check a:hover {
+            text-decoration: underline;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #b0b0b0;
+        }
+
+        .login-link a {
+            color: var(--user-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gray);
+            border-radius: 50%;
+            color: var(--light);
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--user-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--gray);
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .registration-container {
+                flex-direction: column;
+            }
+            
+            .registration-left {
+                padding: 30px;
+            }
+            
+            .registration-right {
+                padding: 30px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-film"></i>
+                    Cine<span>Book</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="#">Movies</a>
+                    <a href="#">Theaters</a>
+                    <a href="#">Offers</a>
+                    <a href="#">About</a>
+                </div>
+                <div class="auth-buttons">
+                   	<a th:href="@{/user/login}" class="btn btn-signup">Login</a>
+                 
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="registration-container">
+                <div class="registration-left">
+                    <h2>Join CineBook Today</h2>
+                    <p>Create your account to unlock amazing features and start booking your favorite movies with ease.</p>
+                    
+                    <ul class="benefits-list">
+                        <li><i class="fas fa-check-circle"></i> Quick and easy ticket booking</li>
+                        <li><i class="fas fa-check-circle"></i> Personalized movie recommendations</li>
+                        <li><i class="fas fa-check-circle"></i> Exclusive member discounts</li>
+                        <li><i class="fas fa-check-circle"></i> Save your favorite theaters</li>
+                        <li><i class="fas fa-check-circle"></i> Track your booking history</li>
+                    </ul>
+                </div>
+                
+                <div class="registration-right">
+                    <div class="form-header">
+                        <h2>Create Account</h2>
+                        <p>Fill in your details to get started</p>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Personal</div>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Account</div>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Complete</div>
+                        </div>
+                    </div>
+                    
+                    <form id="userRegistrationForm" th:action="@{/userregisterr}" method="post">
+                        <!-- Step 1: Personal Information -->
+                        <div class="form-step active" id="step-1">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="Firstname">First Name</label>
+                                    <input type="text" id="user-firstname" name="fname" class="form-control" placeholder="Enter your first name" required>
+                                </div>
+                               <div class="form-group">
+                                    <label for="user-lastname">Last Name</label>
+                                    <input type="text" name="lname" id="user-lastname" class="form-control" placeholder="Enter your last name" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="user-email">Email Address</label>
+                                <input type="email" name="email" id="user-email" class="form-control" placeholder="Enter your email address" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="user-phone">Phone Number</label>
+                                <input type="tel" id="user-phone" name="phone" class="form-control" placeholder="Enter your phone number" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="user-dob">Date of Birth</label>
+                                <input type="date" id="user-dob" name="dob" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-footer">
+                                <div></div> <!-- Empty div for spacing -->
+                                <button type="button" class="btn-next" onclick="nextStep(2)">Next</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Account Information -->
+                        <div class="form-step" id="step-2">
+                            <div class="form-group">
+                                <label for="user-username">Username</label>
+                                <input type="text" name="fullname" id="user-username" class="form-control" placeholder="Choose a username" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="user-password">Password</label>
+                                <input type="password" name="password" id="user-password" class="form-control" placeholder="Create a strong password" required>
+                                <div class="password-strength">
+                                    <div class="password-strength-bar"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="user-confirm-password">Confirm Password</label>
+                                <input type="password" name="cpsw" id="user-confirm-password" class="form-control" placeholder="Confirm your password" required>
+                            </div>
+                            
+                            <div class="form-footer">
+                                <button type="button" class="btn-prev" onclick="prevStep(1)">Previous</button>
+                                <button type="button" class="btn-next" onclick="nextStep(3)">Next</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Terms & Complete -->
+                        <div class="form-step" id="step-3">
+                            <div class="terms-check">
+                                <input type="checkbox" id="user-terms" required>
+                                <label for="user-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I confirm that I am at least 13 years old.</label>
+                            </div>
+                            
+                            <div class="terms-check">
+                                <input type="checkbox" id="user-newsletter">
+                                <label for="user-newsletter">Yes, I would like to receive promotional emails about new movies, special offers, and updates from CineBook.</label>
+                            </div>
+                            
+                            <button type="submit" class="btn-submit">Create Account</button>
+                            
+                            <div class="form-footer">
+                                <button type="submit" class="btn-prev" onclick="prevStep(2)">Previous</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <div class="login-link">
+                        Already have an account? <a th:href="@{/user/login}">Sign in here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CineBook</h3>
+                    <p>Your premier destination for online movie ticket booking. Experience cinema like never before.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">Theaters</a></li>
+                        <li><a href="#">Offers</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Booking Guide</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Cinema Street, Movie City</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope"></i> support@cinebook.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 CineBook Movie Ticket Booking System. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Multi-step form functionality
+        function nextStep(step) {
+            // Hide current step
+            document.querySelector('.form-step.active').classList.remove('active');
+            
+            // Show next step
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            // Update progress bar
+            updateProgressBar(step);
+        }
+        
+        function prevStep(step) {
+            // Hide current step
+            document.querySelector('.form-step.active').classList.remove('active');
+            
+            // Show previous step
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            // Update progress bar
+            updateProgressBar(step);
+        }
+        
+        function updateProgressBar(step) {
+            // Reset all steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Activate steps up to current step
+            for (let i = 1; i <= step; i++) {
+                document.querySelector(`.progress-step[data-step="${i}"]`).classList.add('active');
+            }
+            
+            // Update progress line
+            const progressLine = document.querySelector('.progress-bar::after');
+            const progressPercentage = ((step - 1) / 2) * 100;
+            document.querySelector('.progress-bar').style.setProperty('--progress-width', `${progressPercentage}%`);
+        }
+        
+        // Password strength indicator
+        document.getElementById('user-password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.querySelector('.password-strength-bar');
+            const strengthContainer = document.querySelector('.password-strength');
+            
+            // Reset classes
+            strengthContainer.classList.remove('password-weak', 'password-medium', 'password-strong');
+            
+            if (password.length === 0) {
+                strengthBar.style.width = '0%';
+                return;
+            }
+            
+            // Calculate password strength
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 25;
+            
+            // Lowercase and uppercase check
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 25;
+            
+            // Numbers check
+            if (/\d/.test(password)) strength += 25;
+            
+            // Special characters check
+            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+            
+            // Update strength bar
+            strengthBar.style.width = `${strength}%`;
+            
+            // Add appropriate class
+            if (strength <= 30) {
+                strengthContainer.classList.add('password-weak');
+            } else if (strength <= 70) {
+                strengthContainer.classList.add('password-medium');
+            } else {
+                strengthContainer.classList.add('password-strong');
+            }
+        });
+        
+        // Form submission
+        document.getElementById('userRegistrationForm').addEventListener('submit', function(e) {
+           
+            
+            // Get form values
+            const password = document.getElementById('user-password').value;
+            const confirmPassword = document.getElementById('user-confirm-password').value;
+            
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match! Please check your password confirmation.');
+                return;
+            }
+            
+            // Check if terms are accepted
+            if (!document.getElementById('user-terms').checked) {
+                alert('You must accept the Terms of Service and Privacy Policy to continue.');
+                return;
+            }
+            
+            // In a real application, you would send this data to a server
+            console.log('User Registration:', {
+                firstName: document.getElementById('user-firstname').value,
+                lastName: document.getElementById('user-lastname').value,
+                email: document.getElementById('user-email').value,
+                phone: document.getElementById('user-phone').value,
+                dob: document.getElementById('user-dob').value,
+                username: document.getElementById('user-username').value,
+                password: password,
+                newsletter: document.getElementById('user-newsletter').checked
+            });
+            
+            // Show success message
+            alert('Account created successfully! Welcome to CineBook. Redirecting to login...');
+            
+            // Redirect to login page
+            setTimeout(() => {
+                window.location.href = 'user-login.html';
+            }, 2000);
+        });
+        
+        // Set minimum date for date of birth (13 years ago)
+        window.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const minDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+            document.getElementById('user-dob').max = minDate.toISOString().split('T')[0];
+        });
+    </script>
+</body>
+</html>
