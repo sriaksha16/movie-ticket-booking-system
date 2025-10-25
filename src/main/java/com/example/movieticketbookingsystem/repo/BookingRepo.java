@@ -15,8 +15,9 @@ import com.example.movieticketbookingsystem.model.ShowSeat;
 public interface BookingRepo extends JpaRepository<Booking, Long> {
 
     // ✅ Count bookings made today
-    @Query("SELECT COUNT(b) FROM Booking b WHERE FUNCTION(b.bookingDate) = CURRENT_DATE")
-    long countToday();
+	@Query(value = "SELECT COUNT(*) FROM booking WHERE DATE(booking_date_time) = CURRENT_DATE", nativeQuery = true)
+	long countToday();
+
 
     // ✅ Find all bookings by user email
     List<Booking> findByUserEmail(String userEmail);
