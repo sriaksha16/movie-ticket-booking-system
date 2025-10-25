@@ -35,7 +35,7 @@ public class Booking {
     @ManyToOne
     private ShowSeat seat;
     
-    @Column(name = "booking_date_time", columnDefinition = "DATETIME")
+    @Column(name = "booking_date_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime bookingDateTime;
 
     @ManyToOne
